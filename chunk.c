@@ -1,4 +1,5 @@
 #include "chunk.h"
+#include "memory.h"
 #include <stdlib.h>
 
 void initChunk(Chunk *chunk) {
@@ -15,18 +16,19 @@ void writeChunk(Chunk *chunk, uint8_t byte) {
     chunk->count++;
 }
 
-void growChunk(Chunk *chunk) {
-    reallocateChunk(chunk, chunk->capacity * 2);
+void freeChunk(Chunk *chunk) {
+    reallocateChunk(chunk, 0);
+    initChunk(chunk);
 }
 
-void reallocateChunk(Chunk *chunk, int newCapacity) {
-    if (newCapacity == 0) {
-        free(chunk->code);
-        initChunk(chunk);
-    } else {
-        uint8_t tmp = realloc(chunk->code, newCapacity);
-        if (tmp == NULL) exit(1);
-        chunk->code = tmp;
-        chunk->capacity = newCapacity;
-    }
+void growChunk(Chunk *chunk) {
+    size_t newCapacity = chunk->capacity == 0 ? 8 : chunk->capacity * 2;
+    reallocateChunk(chunk, newCapacity*sizeof(uint8_t));
+}
+
+void reallocateChunk(Chunk *chunk, int newSize) {
+    chunk->code = reallocate(
+        chunk->code, chunk->capacity * sizeof(uint8_t), newSize
+    );
+    chunk->capacity = newSize;
 }
