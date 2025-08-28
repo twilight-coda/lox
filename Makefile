@@ -3,7 +3,7 @@
 CC=clang
 INCDIRS=-I.
 CFLAGS=-g -Wall -Wextra $(INCDIRS)
-OBJECTS=main.o chunk.o memory.o debug.o
+OBJECTS=main.o chunk.o memory.o debug.o value.o
 BIN=lox
 
 all: $(BIN)
