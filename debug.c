@@ -27,10 +27,10 @@ void disassembleChunk(Chunk *chunk, const char *chunkName) {
 
 int disassembleInstruction(Chunk *chunk, int offset) {
     printf("%04d ", offset);
-    if (offset > 0 && chunk->lines[offset] == chunk->lines[offset - 1]) {
+    if ( offset > 0 && getLine(chunk, offset) == getLine(chunk, offset - 1)) {
         printf("%3s| ", " ");
     } else {
-        printf("%4d ", chunk->lines[offset]);
+        printf("%4d ", getLine(chunk, offset));
     }
     uint8_t instr = chunk->code[offset];
 
