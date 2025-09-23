@@ -1,39 +1,26 @@
 #include "common.h"
 #include "chunk.h"
 #include "debug.h"
+#include "vm.h"
 
 int main (int argc, const char* argv[]) {
+    initVM();
     Chunk chunk;
     initChunk(&chunk);
-    int offset = addConstant(&chunk, 1.2);
+    int offset = addConstant(&chunk, 2.2);
     writeChunk(&chunk, OP_CONSTANT, 1);
     writeChunk(&chunk, offset, 1);
-    offset = addConstant(&chunk, 43.0);
-    writeChunk(&chunk, OP_CONSTANT, 1);
-    writeChunk(&chunk, offset, 1);
-    offset = addConstant(&chunk, 44.0);
-    writeChunk(&chunk, OP_CONSTANT, 1);
-    writeChunk(&chunk, offset, 1);
-    offset = addConstant(&chunk, 45.0);
-    writeChunk(&chunk, OP_CONSTANT, 2);
-    writeChunk(&chunk, offset, 2);
-    offset = addConstant(&chunk, 45.0);
-    writeChunk(&chunk, OP_CONSTANT, 3);
-    writeChunk(&chunk, offset, 3);
-    offset = addConstant(&chunk, 45.0);
-    writeChunk(&chunk, OP_CONSTANT, 4);
-    writeChunk(&chunk, offset, 4);
-    offset = addConstant(&chunk, 45.0);
-    writeChunk(&chunk, OP_CONSTANT, 5);
-    writeChunk(&chunk, offset, 5);
-    offset = addConstant(&chunk, 45.0);
-    writeChunk(&chunk, OP_CONSTANT, 6);
-    writeChunk(&chunk, offset, 6);
-    offset = addConstant(&chunk, 42.0);
-    writeChunk(&chunk, OP_CONSTANT, 7);
-    writeChunk(&chunk, offset, 7);
-    writeChunk(&chunk, OP_RETURN, 8);
-    disassembleChunk(&chunk, "test chunk");
+    // offset = addConstant(&chunk, 43.0);
+    // writeChunk(&chunk, OP_CONSTANT, 1);
+    // writeChunk(&chunk, offset, 1);
+    // writeChunk(&chunk, OP_MULTIPLY, 1);
+    for (int i = 0; i < 1000000; i++) {
+        writeChunk(&chunk, OP_NEGATE, 2);
+    }
+    writeChunk(&chunk, OP_RETURN, 2);
+    // disassembleChunk(&chunk, "test chunk");
+    interpret(&chunk);
+    freeVM();
     freeChunk(&chunk);
 
     return 0;
